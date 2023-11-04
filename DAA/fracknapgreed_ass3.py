@@ -1,49 +1,50 @@
-class ItemValue:
-    """Item Value DataClass"""
-    def __init__(self, wt_, val_, ind_):
-        self.wt = wt_
-        self.val = val_
-        self.ind = ind_
-        self.cost = val_ // wt_
+# Structure for an item which stores weight and
+# corresponding value of Item
+class Item:
+    def __init__(self, profit, weight):
+        self.profit = profit
+        self.weight = weight
 
-    def __lt__(self, other):
-        return self.cost < other.cost
+# Main greedy function to solve problem
 
-def fractionalKnapSack(wt, val, capacity):
-    """Function to get maximum value"""
-    iVal = [ItemValue(wt[i], val[i], i) for i in range(len(wt))]
-    # Sorting items by cost
-    iVal.sort(key=lambda x: x.cost, reverse=True)
-    totalValue = 0
-    for i in iVal:
-        curWt = i.wt
-        curVal = i.val
-        if capacity - curWt >= 0:
-            capacity -= curWt
-            totalValue += curVal
+
+def fractionalKnapsack(W, arr):
+
+    # Sorting Item on basis of ratio
+    arr.sort(key=lambda x: (x.profit/x.weight), reverse=True)
+
+    # Result(value in Knapsack)
+    finalvalue = 0.0
+
+    # Looping through all Items
+    for item in arr:
+
+        # If adding Item won't overflow,
+        # add it completely
+        if item.weight <= W:
+            W -= item.weight
+            finalvalue += item.profit
+
+        # If we can't add current Item,
+        # add fractional part of it
         else:
-            fraction = capacity / curWt
-            totalValue += curVal * fraction
-            capacity = int(capacity - (curWt * fraction))
+            finalvalue += item.profit * W / item.weight
             break
-    return totalValue
 
-def main():
-    while True:
-        print("Menu:")
-        print("1. Calculate Maximum Value in Knapsack")
-        print("2. Exit")
-        choice = input("Enter your choice: ")
-        if choice == "1":
-            wt = list(map(int, input("Enter the weights separated by spaces: ").split()))
-            val = list(map(int, input("Enter the values separated by spaces: ").split()))
-            capacity = int(input("Enter the capacity of the knapsack: "))
-            maxValue = fractionalKnapSack(wt, val, capacity)
-            print("Maximum value in Knapsack =", maxValue)
-        elif choice == "2":
-            break
-        else:
-            print("Invalid choice. Please try again.")
+    # Returning final value
+    return finalvalue
 
+
+# Driver Code
 if __name__ == "__main__":
-    main()
+    W = 50
+    arr = [Item(60, 10), Item(100, 20), Item(120, 30)]
+
+    # Function call
+    max_val = fractionalKnapsack(W, arr)
+    print(max_val)
+
+# TC- > O(NlogN)   FOR SORTING
+# SC -> O(N) as no extra space is
+
+# OBJECTIVE IS THAT PROFIT SHOULD BE MAXXIMUM
