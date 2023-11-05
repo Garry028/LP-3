@@ -1,61 +1,54 @@
-# O(N^2)  Time complexity
-#  O(N^2)  Space complexity
-# We are using a 2-D array of size N rows and N columns, and also, because of Recursion, the recursive stack will have a linear space here.
+def solveNQueens(n, initial_queen_position):
+    col = set()
+    posDiag = set()
+    negDiag = set()
 
-from copy import deepcopy
+    res = []
+    board = [["."]*n for i in range(n)]
 
-# Check if a queen can be placed on board[row][col]
+    initial_row, initial_col = initial_queen_position
+    board[initial_row][initial_col] = "Q"
+    col.add(initial_col)
+    posDiag.add(initial_row + initial_col)
+    negDiag.add(initial_row - initial_col)
 
+    def backtrack(r):
+        if r == n:
+            copy = ["".join(row) for row in board]
+            res.append(copy)
+            return
 
-def is_safe(board, row, col, n):
-    # Check this row on the left side
-    for i in range(col):
-        if board[row][i]:
-            return False
+        for c in range(n):
+            if c in col or (r+c) in posDiag or (r-c) in negDiag:
+                continue
 
-    # Check upper diagonal on the left side
-    for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
-        if board[i][j]:
-            return False
+            col.add(c)
+            posDiag.add(r+c)
+            negDiag.add(r-c)
+            board[r][c] = "Q"
 
-    # Check lower diagonal on the left side
-    for i, j in zip(range(row, n, 1), range(col, -1, -1)):
-        if board[i][j]:
-            return False
+            backtrack(r+1)
 
-    return True
+            col.remove(c)
+            posDiag.remove(r+c)
+            negDiag.remove(r-c)
+            board[r][c] = "."
 
-# Main recursive function to solve N-Queens
-
-
-def solve_n_queens_util(board, col, n):
-    # Base case: If all queens are placed
-    if col >= n:
-        return [deepcopy(board)]
-
-    solutions = []
-    # Try placing queen in all rows one by one
-    for i in range(n):
-        if is_safe(board, i, col, n):
-            board[i][col] = 1
-            for solution in solve_n_queens_util(board, col + 1, n):
-                solutions.append(deepcopy(solution))
-            board[i][col] = 0  # backtrack
-
-    return solutions
+    # Start from the next row after placing the initial queen
+    backtrack(initial_row + 1)
+    return res
 
 
-# Driver code
-if __name__ == "__main__":
-    n = 4  # Number of queens and size of board (n x n)
-    board = [[0 for _ in range(n)] for _ in range(n)]
+# Ask the user for the initial queen's position
+initial_row = int(
+    input("Enter the initial row for the first queen (0 to 7): "))
+initial_col = int(
+    input("Enter the initial column for the first queen (0 to 7): "))
+initial_queen_position = (initial_row, initial_col)
 
-    # Solve and get all possible solutions
-    solutions = solve_n_queens_util(board, 0, n)
+solutions = solveNQueens(8, initial_queen_position)
 
-    # Print solutions
-    for idx, solution in enumerate(solutions):
-        print(f"Solution {idx + 1}:")
-        for row in solution:
-            print(" ".join(str(cell) for cell in row))
-        print()
+for solution in solutions:
+    for row in solution:
+        print(" ".join(row))
+    print()
