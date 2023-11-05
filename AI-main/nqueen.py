@@ -1,45 +1,50 @@
-def solveNQueens(n):
-    col = set()  # set contains columns which has queen
-    posDiag = set() # (r+c)
-    negDiag = set() # (r-c)
-
-
+def solveNQueens(n, initial_queen_position):
+    col = set()
+    posDiag = set()
+    negDiag = set()
     res = []
-    # initially board will be "."
-    board = [["."]* n for i in range(n)]
+    board = [["."]*n for i in range(n)]
 
-    #  we're traversing row by row
+    initial_row, initial_col = initial_queen_position
+    board[initial_row][initial_col] = "Q"
+    col.add(initial_col)
+    posDiag.add(initial_row + initial_col)
+    negDiag.add(initial_row - initial_col)
+
     def backtrack(r):
-        # all rows has been traversed and we have valid nqueen solutiom
-        if r==n:
+        if r == n:
             copy = ["".join(row) for row in board]
             res.append(copy)
             return
 
         for c in range(n):
-            # means we're not allowed to use this column
             if c in col or (r+c) in posDiag or (r-c) in negDiag:
                 continue
 
-            #  else update sets
             col.add(c)
             posDiag.add(r+c)
             negDiag.add(r-c)
-            board[r][c]="Q"
-
-            #  call for next iteration
+            board[r][c] = "Q"
             backtrack(r+1)
-
-            # cleanup after every iteration to get another possible answer
             col.remove(c)
             posDiag.remove(r+c)
             negDiag.remove(r-c)
-            board[r][c]="."
-    backtrack(0)  # go back to once again and check another possible answer
+            board[r][c] = "."
+
+    # Start from the next row after placing the initial queen
+    backtrack(initial_row + 1)
     return res
 
-solutions = solveNQueens(8)
-#  for printing in matrix type format
+
+# Ask the user for the initial queen's position
+initial_row = int(
+    input("Enter the initial row for the first queen (0 to 7): "))
+initial_col = int(
+    input("Enter the initial column for the first queen (0 to 7): "))
+initial_queen_position = (initial_row, initial_col)
+
+solutions = solveNQueens(8, initial_queen_position)
+
 for solution in solutions:
     for row in solution:
         print(" ".join(row))
