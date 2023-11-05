@@ -6,12 +6,12 @@ contract Crud {
     }
     User[] public users;
     uint public nextId = 0;
-    
+
     function Create(string memory name) public {
         users.push(User(nextId, name));
         nextId++;
     }
-    
+
     function Read(uint id) view public returns(uint, string memory) {
         for(uint i=0; i<users.length; i++) {
             if(users[i].id == id) {
@@ -27,7 +27,7 @@ contract Crud {
             }
         }
     }
-    
+
     function Delete(uint id) public {
         delete users[id];
     }

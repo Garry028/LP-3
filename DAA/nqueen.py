@@ -1,41 +1,41 @@
 def solveNQueens(n, initial_queen_position):
-    col = set()
-    posDiag = set()
-    negDiag = set()
+    def is_valid(board, row, col):
+        # Check the column
+        for i in range(row):
+            if board[i][col] == 'Q':
+                return False
 
-    res = []
-    board = [["."]*n for i in range(n)]
+        # Check the upper left diagonal
+        for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+            if board[i][j] == 'Q':
+                return False
 
-    initial_row, initial_col = initial_queen_position
-    board[initial_row][initial_col] = "Q"
-    col.add(initial_col)
-    posDiag.add(initial_row + initial_col)
-    negDiag.add(initial_row - initial_col)
+        # Check the upper right diagonal
+        for i, j in zip(range(row, -1, -1), range(col, n)):
+            if board[i][j] == 'Q':
+                return False
 
-    def backtrack(r):
-        if r == n:
-            copy = ["".join(row) for row in board]
-            res.append(copy)
+        return True
+
+    def backtrack(row):
+        if row == n:
+            res.append(["".join(row) for row in board])
             return
 
-        for c in range(n):
-            if c in col or (r+c) in posDiag or (r-c) in negDiag:
-                continue
+        for col in range(n):
+            if (row, col) == initial_queen_position:
+                continue  # Skip the specified initial position
 
-            col.add(c)
-            posDiag.add(r+c)
-            negDiag.add(r-c)
-            board[r][c] = "Q"
+            if is_valid(board, row, col):
+                board[row][col] = 'Q'
+                backtrack(row + 1)
+                board[row][col] = '.'
 
-            backtrack(r+1)
+    initial_row, initial_col = initial_queen_position
+    res = []
+    board = [['.' for _ in range(n)] for _ in range(n)]
+    backtrack(0)
 
-            col.remove(c)
-            posDiag.remove(r+c)
-            negDiag.remove(r-c)
-            board[r][c] = "."
-
-    # Start from the next row after placing the initial queen
-    backtrack(initial_row + 1)
     return res
 
 
@@ -50,8 +50,5 @@ solutions = solveNQueens(8, initial_queen_position)
 
 for solution in solutions:
     for row in solution:
-        print(" ".join(row))
+        print(row)
     print()
-
-# TC --> O(N!) worst case
-# SC --> O(N)
