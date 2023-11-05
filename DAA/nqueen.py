@@ -52,3 +52,6 @@ for solution in solutions:
     for row in solution:
         print(" ".join(row))
     print()
+
+# TC --> O(N!) worst case
+# SC --> O(N)
