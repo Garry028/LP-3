@@ -2,6 +2,7 @@ def solveNQueens(n, initial_queen_position):
     col = set()
     posDiag = set()
     negDiag = set()
+
     res = []
     board = [["."]*n for i in range(n)]
 
@@ -25,7 +26,9 @@ def solveNQueens(n, initial_queen_position):
             posDiag.add(r+c)
             negDiag.add(r-c)
             board[r][c] = "Q"
+
             backtrack(r+1)
+
             col.remove(c)
             posDiag.remove(r+c)
             negDiag.remove(r-c)
