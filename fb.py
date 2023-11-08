@@ -8,7 +8,7 @@ def fib_iterative(n):
         b = c
 
 
-# fib_iterative(10)
+fib_iterative(10)
 
 
 def fibonacci(num):

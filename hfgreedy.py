@@ -1,6 +1,7 @@
 # A Huffman Tree Node
 import heapq
 
+
 class node:
     def __init__(self, freq, symbol, left=None, right=None):
         # frequency of symbol
@@ -44,10 +45,28 @@ def printNodes(node, val=''):
 
 
 # characters for huffman tree
-chars = ['a', 'b', 'c', 'd', 'e', 'f']
+chars = ['a', 'b', 'c', 'd', 'e', 'f','h']
 
 # frequency of characters
-freq = [5, 9, 12, 13, 16, 45]
+
+def fibonacci(num):
+    if num == 0:
+        return 0
+    elif num == 1 or num == 2:
+        return 1
+    else:
+        return fibonacci(num - 1) + fibonacci(num - 2)
+
+
+n = 8
+
+freq = []
+
+for i in range(n):
+    freq.append(fibonacci(i))
+
+print(freq)
+
 
 # list containing unused nodes
 nodes = []
@@ -58,7 +77,6 @@ for x in range(len(chars)):
     heapq.heappush(nodes, node(freq[x], chars[x]))
 
 while len(nodes) > 1:
-
     # sort all the nodes in ascending order
     # based on their frequency
     left = heapq.heappop(nodes)
