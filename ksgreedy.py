@@ -1,4 +1,4 @@
-# Structure for an item which stores weight and
+# Structure for an item which stores weight and profit
 # corresponding value of Item
 class Item:
     def __init__(self, profit, weight):
