@@ -45,6 +45,6 @@ if __name__ == "__main__":
     print(max_val)
 
 # TC- > O(NlogN)   FOR SORTING
-# SC -> O(N) as no extra space is
+# SC -> O(1) as no extra space is
 
 # OBJECTIVE IS THAT PROFIT SHOULD BE MAXXIMUM
